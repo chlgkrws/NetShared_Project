@@ -54,7 +54,7 @@
 						${board.starRate }점 &nbsp;I &nbsp; <b>장르</b> &nbsp; ${board.genre }
 					</p>
 					<hr style="margin-bottom: 30px;">
-					<pre style="font-weight: 600; font-size: 25px;"><c:out value="${board.content }" escapeXml="false">
+					<pre style="font-weight: 600; font-size: 18px; overflow: auto; white-space: pre-wrap;"><c:out value="${board.content }" escapeXml="false">
 					</c:out>
 					</pre>
 				</div>

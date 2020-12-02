@@ -36,7 +36,7 @@ public class BoardWriteController implements Controller {
 			boardVO.setValid(true);
 
 			BoardService boardService = BoardService.getInstance();
-
+			
 			if (isModify) {
 				int boardId = Integer.parseInt(request.getParameter("boardId"));
 				String writer = request.getParameter("writer");

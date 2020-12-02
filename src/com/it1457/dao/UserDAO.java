@@ -65,7 +65,7 @@ public class UserDAO {
 
 		try {
 			conn = connect();
-			pstmt = conn.prepareStatement("insert into user_tbl values(?,?,?,?,?,?,?,?)");
+			pstmt = conn.prepareStatement("INSERT INTO `it1457`.`user_tbl` (`user_id`, `password`, `username`, `identity`, `phone`, `account`, `auth`, `wouldUYN`) VALUES (?,?,?,?,?,?,?,?)");
 			pstmt.setString(1, userVO.getId());
 			pstmt.setString(2, userVO.getPassword());
 			pstmt.setString(3, userVO.getUserName());
@@ -73,7 +73,7 @@ public class UserDAO {
 			pstmt.setString(5, userVO.getPhone());
 			pstmt.setString(6, userVO.getAccount());
 			pstmt.setString(7, "0");
-			pstmt.setBoolean(8, true);
+			pstmt.setInt(8, 1);
 			pstmt.executeUpdate();
 		} catch (Exception ex) {
 			System.out.println("오류 발생 : " + ex);

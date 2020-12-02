@@ -15,12 +15,9 @@ import com.it1457.vo.BoardVO;
 import com.it1457.vo.UserVO;
 
 public class FrontController  extends HttpServlet{
-	
 	private static final long serialVersionUID = 1L; 
 	String charset = null;
 	HashMap<String, Controller> controllerList = null;
-	
-	
 	
 	@Override
 	public void init(ServletConfig config) throws ServletException {			//서블릿이 실행될 때 요청 url에 따라 Controller를 나눠줌.

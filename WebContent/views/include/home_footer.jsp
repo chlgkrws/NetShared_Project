@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>footer</title>
+<link rel="stylesheet" href="/resources/css/home/home.css" />
 </head>
 <body>
 
@@ -15,23 +16,23 @@
 				style="width: 30px;" /> <a href="#"><p>맨 위로 가기</p></a>
 		</div>
 		<div class="footer_info">
-			<div>
+			<div class="footer_sub_div">
 				<p>NetShared</p>
 			</div>
 			<div class="footer_div"></div>
-			<div>
+			<div class="footer_sub_div">
 				<p>대표 최학준</p>
 			</div>
 			<div class="footer_div"></div>
-			<div>
+			<div class="footer_sub_div">
 				<p>사업자 등록번호 000-00-0000</p>
 			</div>
 			<div class="footer_div"></div>
-			<div>
+			<div class="footer_sub_div">
 				<p>비즈니스 문의 cgw981@gsitm.com</p>
 			</div>
 			<div class="footer_div"></div>
-			<div>
+			<div class="footer_sub_div">
 				<p>02-2898-9819</p>
 			</div>
 		</div>

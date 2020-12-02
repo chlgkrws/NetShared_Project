@@ -9,6 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Home</title>
 <link rel="stylesheet" href="/resources/css/home/home.css" />
+
 </head>
 
 <body>
@@ -41,7 +42,7 @@
 				<div id="board" style="text-align: center;">
 
 					<!-- 빠른 매칭 예시(미완성) -->
-					<%
+					<%-- 					<%
 						for (int i = 0; i < 7; i++) {
 						out.print("<div class='matching_content'>" + "	<div style='float: left; width: 20%; line-height: 40px;'>"
 						+ "		<p>chlgkr**</p>" + "	</div>" + "	<div style='float: left; width: 20%; line-height: 40px;'>"
@@ -53,11 +54,11 @@
 						+ "		<button class='participate_button' type='button'"
 						+ "			onclick='go_quick_matching()'>참여하기</button>" + "	</div>" + "</div>");
 					}
-					%>
+					%> --%>
 
 
 					<!-- 실제 모델이 될 부분 -->
-					<!-- <div class="matching_content">
+					<div class="matching_content">
 						<div style="float: left; width: 20%; line-height: 40px;">
 							<p>chlgkr**</p>
 						</div>
@@ -74,7 +75,134 @@
 							<button class="participate_button" type="button"
 								onclick="go_quick_matching()">참여하기</button>
 						</div>
-					</div> -->
+					</div>
+					<div class="matching_content">
+						<div style="float: left; width: 20%; line-height: 40px;">
+							<p>fwqf**</p>
+						</div>
+						<div style="float: left; width: 20%; line-height: 40px;">
+							<p style="font-size: 13px;">최소 1개월</p>
+						</div>
+						<div style="float: left; width: 20%; line-height: 40px;">
+							<p style="font-size: 13px;">20% DC</p>
+						</div>
+						<div style="float: left; width: 20%; line-height: 40px;">
+							<p style="font-size: 13px;">2명</p>
+						</div>
+						<div style="float: right; width: 20%; line-height: 40px;">
+							<button class="participate_button" type="button"
+								onclick="go_quick_matching()">참여하기</button>
+						</div>
+					</div>
+					<div class="matching_content">
+						<div style="float: left; width: 20%; line-height: 40px;">
+							<p>gkr**</p>
+						</div>
+						<div style="float: left; width: 20%; line-height: 40px;">
+							<p style="font-size: 13px;">최소 1개월</p>
+						</div>
+						<div style="float: left; width: 20%; line-height: 40px;">
+							<p style="font-size: 13px;">15% DC</p>
+						</div>
+						<div style="float: left; width: 20%; line-height: 40px;">
+							<p style="font-size: 13px;">2명</p>
+						</div>
+						<div style="float: right; width: 20%; line-height: 40px;">
+							<button class="participate_button" type="button"
+								onclick="go_quick_matching()">참여하기</button>
+						</div>
+					</div>
+					<div class="matching_content">
+						<div style="float: left; width: 20%; line-height: 40px;">
+							<p>gpgp**</p>
+						</div>
+						<div style="float: left; width: 20%; line-height: 40px;">
+							<p style="font-size: 13px;">최소 3개월</p>
+						</div>
+						<div style="float: left; width: 20%; line-height: 40px;">
+							<p style="font-size: 13px;">15% DC</p>
+						</div>
+						<div style="float: left; width: 20%; line-height: 40px;">
+							<p style="font-size: 13px;">1명</p>
+						</div>
+						<div style="float: right; width: 20%; line-height: 40px;">
+							<button class="participate_button" type="button"
+								onclick="go_quick_matching()">참여하기</button>
+						</div>
+					</div>
+					<div class="matching_content">
+						<div style="float: left; width: 20%; line-height: 40px;">
+							<p>pepe**</p>
+						</div>
+						<div style="float: left; width: 20%; line-height: 40px;">
+							<p style="font-size: 13px;">최소 1개월</p>
+						</div>
+						<div style="float: left; width: 20%; line-height: 40px;">
+							<p style="font-size: 13px;">30% DC</p>
+						</div>
+						<div style="float: left; width: 20%; line-height: 40px;">
+							<p style="font-size: 13px;">3명</p>
+						</div>
+						<div style="float: right; width: 20%; line-height: 40px;">
+							<button class="participate_button" type="button"
+								onclick="go_quick_matching()">참여하기</button>
+						</div>
+					</div>
+					<div class="matching_content">
+						<div style="float: left; width: 20%; line-height: 40px;">
+							<p>chr**</p>
+						</div>
+						<div style="float: left; width: 20%; line-height: 40px;">
+							<p style="font-size: 13px;">최소 2개월</p>
+						</div>
+						<div style="float: left; width: 20%; line-height: 40px;">
+							<p style="font-size: 13px;">15% DC</p>
+						</div>
+						<div style="float: left; width: 20%; line-height: 40px;">
+							<p style="font-size: 13px;">2명</p>
+						</div>
+						<div style="float: right; width: 20%; line-height: 40px;">
+							<button class="participate_button" type="button"
+								onclick="go_quick_matching()">참여하기</button>
+						</div>
+					</div>
+					<div class="matching_content">
+						<div style="float: left; width: 20%; line-height: 40px;">
+							<p>chr**</p>
+						</div>
+						<div style="float: left; width: 20%; line-height: 40px;">
+							<p style="font-size: 13px;">최소 4개월</p>
+						</div>
+						<div style="float: left; width: 20%; line-height: 40px;">
+							<p style="font-size: 13px;">30% DC</p>
+						</div>
+						<div style="float: left; width: 20%; line-height: 40px;">
+							<p style="font-size: 13px;">2명</p>
+						</div>
+						<div style="float: right; width: 20%; line-height: 40px;">
+							<button class="participate_button" type="button"
+								onclick="go_quick_matching()">참여하기</button>
+						</div>
+					</div>
+					<div class="matching_content">
+						<div style="float: left; width: 20%; line-height: 40px;">
+							<p>ch**</p>
+						</div>
+						<div style="float: left; width: 20%; line-height: 40px;">
+							<p style="font-size: 13px;">최소 1개월</p>
+						</div>
+						<div style="float: left; width: 20%; line-height: 40px;">
+							<p style="font-size: 13px;">15% DC</p>
+						</div>
+						<div style="float: left; width: 20%; line-height: 40px;">
+							<p style="font-size: 13px;">3명</p>
+						</div>
+						<div style="float: right; width: 20%; line-height: 40px;">
+							<button class="participate_button" type="button"
+								onclick="go_quick_matching()">참여하기</button>
+						</div>
+					</div>
+
 				</div>
 			</div>
 			<!-- right 끝 -->
