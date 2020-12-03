@@ -125,7 +125,6 @@ public class UserDAO {
 			pstmt.setBoolean(1, false);
 			pstmt.setString(2, userId);
 			pstmt.executeUpdate();
-			
 			return 1; // true
 		} catch (Exception ex) {
 			System.out.println("오류 발생 : " + ex);

@@ -47,26 +47,50 @@
 							<p>매월 3,650원</p>
 						</div>
 					</div>
-					<div style="width: 60%; display: inline-block; margin-top: 30px;">
-						<div class="matching_left">
-							<button class="matching_button" id="button1" type="button"
-								style="width: 170px; height: 50px;"
-								onmouseover="matching_button_on(this)"
-								onmouseout="matching_button_out(this)"
-								onclick="matching_button_click(this)">파티원</button>
+					<form action="/matchingmaster.do" method="get"
+						onsubmit="return match_click();">
+						<div style="width: 60%; display: inline-block; margin-top: 30px;">
+							<div class="matching_left">
+								<button class="matching_button" id="button1" type="button"
+									style="width: 170px; height: 50px;"
+									onmouseover="matching_button_on(this)"
+									onmouseout="matching_button_out(this)"
+									onclick="matching_button_click(this)">파티원</button>
+							</div>
+							<div class="matching_right">
+								<button class="matching_button" id="button2" type="button"
+									style="width: 170px; height: 50px;"
+									onmouseover="matching_button_on(this)"
+									onmouseout="matching_button_out(this)"
+									onclick="matching_button_click(this)">파티장</button>
+							</div>
+							<input type="hidden" id="ismember" name="ismember" value="yes" />
+							<input type="hidden" id="session_id" name="session_id"
+								value="<%=session.getAttribute("id")%>" />
+							<input type="hidden" id="headCount" name="headCount"/>
+							<ul id="numberOfMember">
+								<li><button type="button" id="HCButton1"
+										onclick="hc_button_click(this)"
+										onmouseover="hc_button_on(this)"
+										onmouseout="hc_button_out(this)">1인</button></li>
+								<li><button type="button" id="HCButton2"
+										onclick="hc_button_click(this)"
+										onmouseover="hc_button_on(this)"
+										onmouseout="hc_button_out(this)">2인</button></li>
+								<li><button type="button" id="HCButton3"
+										onclick="hc_button_click(this)"
+										onmouseover="hc_button_on(this)"
+										onmouseout="hc_button_out(this)">3인</button></li>
+								<li><button type="button" id="HCButton4"
+										onclick="hc_button_click(this)"
+										onmouseover="hc_button_on(this)"
+										onmouseout="hc_button_out(this)">4인</button></li>
+							</ul>
+							<div style="margin-top: 30px; display: block;">
+								<button type="submit" class="match_click">매칭 시작</button>
+							</div>
 						</div>
-						<div class="matching_right">
-							<button class="matching_button" id="button2" type="button"
-								style="width: 170px; height: 50px;"
-								onmouseover="matching_button_on(this)"
-								onmouseout="matching_button_out(this)"
-								onclick="matching_button_click(this)">파티장</button>
-						</div>
-						<div style="margin-top: 30px; display: block;">
-							<button type="button" id="match_click" onclick="match_click()">매칭
-								시작</button>
-						</div>
-					</div>
+					</form>
 				</div>
 			</div>
 			<br> <br> <br>

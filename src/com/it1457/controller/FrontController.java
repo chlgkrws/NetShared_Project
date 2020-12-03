@@ -15,7 +15,7 @@ import com.it1457.vo.BoardVO;
 import com.it1457.vo.UserVO;
 
 public class FrontController  extends HttpServlet{
-	private static final long serialVersionUID = 1L; 
+ 	private static final long serialVersionUID = 1L; 
 	String charset = null;
 	HashMap<String, Controller> controllerList = null;
 	
@@ -33,6 +33,7 @@ public class FrontController  extends HttpServlet{
 		controllerList.put("/myPage.do", new MyPageController());
 		controllerList.put("/withdrawUser.do", new WithdrawalUserController());
 		controllerList.put("/likeUp.do", new LikeUpController());
+		controllerList.put("/matchingmaster.do", new MatchingMasterController());
 	}
 	
 	@Override
