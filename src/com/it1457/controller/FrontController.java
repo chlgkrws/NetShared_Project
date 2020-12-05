@@ -3,7 +3,6 @@ package com.it1457.controller;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -11,8 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.it1457.vo.BoardVO;
-import com.it1457.vo.UserVO;
 
 public class FrontController  extends HttpServlet{
  	private static final long serialVersionUID = 1L; 

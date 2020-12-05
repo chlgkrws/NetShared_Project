@@ -140,7 +140,7 @@ public class BoardDAO {
 			pstmt.setInt(1, displayPost);
 			pstmt.setInt(2, postNum);
 			rs = pstmt.executeQuery();
-
+			System.out.println(rs.getFetchSize());
 			while (rs.next()) {
 				if (!rs.getBoolean(9)) {
 					continue;

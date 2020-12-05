@@ -13,8 +13,13 @@ public class MatchingService {
 		return service;
 	}
 
-	// 글 작성
+	//파티원으로 신청가능 한지 체크
 	public boolean isPossibleToWaitMember(String userId) {
 		return dao.isPossibleToWaitMember(userId);
+	}
+	
+	//파티장으로 신청가능 한지 체크
+	public boolean isPossibleToWaitLeader(String userId) {
+		return dao.isPossibleToWaitLeader(userId);
 	}
 }
