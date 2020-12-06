@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.util.HashSet;
+
+import com.it1457.vo.UserVO;
 
 public class MatchingDAO {
 
@@ -62,15 +65,12 @@ public class MatchingDAO {
 	// 파티원 신청자가 신청 가능한지 판별.
 	public boolean isPossibleToWaitMember(String userId) {
 		Connection conn = null;
-		PreparedStatement CheckWaitPstmt = null;
 		PreparedStatement CheckAlreadyUsedPstmt = null;
 		ResultSet rs = null;
+		String tableName = "member_wait_tbl";
 		try {
 			conn = connect();
-			CheckWaitPstmt = conn.prepareStatement("select user_id, is_wait from member_wait_tbl where user_id = ?");
-			CheckWaitPstmt.setString(1, userId);
-			CheckWaitPstmt.execute();
-			boolean isExist = CheckWaitPstmt.getResultSet().next(); // true면 값이 있음, false면 값이 없음 || 값이 있으면 대기, 없으면 가능
+			boolean isExist = isExistWaiting(userId, tableName); // true면 값이 있음, false면 값이 없음 || 값이 있으면 대기, 없으면 가능
 			System.out.println("(DAO - isPossibleToWaitMember)isExist : " + isExist);
 
 			// 이미 대기열에 존재한다면
@@ -137,7 +137,6 @@ public class MatchingDAO {
 			System.out.println("(DAO - isPossibleToWaitMember)오류 발생 : " + ex);
 			return false;
 		} finally {
-			close(conn, CheckWaitPstmt);
 			close(conn, CheckAlreadyUsedPstmt);
 		}
 	}
@@ -145,16 +144,14 @@ public class MatchingDAO {
 	// 파티장 신청자가 신청 가능한지.
 	public boolean isPossibleToWaitLeader(String userId) {
 		Connection conn = null;
-		PreparedStatement CheckWaitPstmt = null;
 		PreparedStatement CheckAlreadyUsedPstmt = null;
-
+		String tableName = "leader_wait_tbl";
+		
 		ResultSet rs = null;
 		try {
 			conn = connect();
-			CheckWaitPstmt = conn.prepareStatement("select user_id, is_wait from leader_wait_tbl where user_id = ?");
-			CheckWaitPstmt.setString(1, userId);
-			rs = CheckWaitPstmt.executeQuery();
-			boolean isExist = rs.next();
+			boolean isExist = isExistWaiting(userId, tableName);
+			
 			System.out.println("(DAO - isPossibleToWaitLeader) isExist : " + isExist);
 			// 이미 대기열에 존재한다면
 			if (isExist) {
@@ -164,12 +161,12 @@ public class MatchingDAO {
 				CheckAlreadyUsedPstmt.setString(1, userId);
 				rs = CheckAlreadyUsedPstmt.executeQuery();
 
-				//매칭 되어 있지 않음.
+				// 매칭 되어 있지 않음.
 				if (!rs.next()) {
 					System.out.println("(DAO - isPossibleToWaitLeader)대기열에 이미 존재하지만, 매칭 중이진 않는 파티장");
 					return true;
 				}
-			}else {
+			} else {
 				System.out.println("대기열에 존재하지 않는 파티장");
 				return true;
 			}
@@ -177,10 +174,76 @@ public class MatchingDAO {
 			System.out.println("오류 발생 : " + ex);
 			return false;
 		} finally {
-			close(conn, CheckWaitPstmt);
 			close(conn, CheckAlreadyUsedPstmt);
 		}
 		System.out.println("(DAO - isPossibleToWaitLeader)대기열 존재, 매칭 중(실패)");
 		return false;
 	}
+
+	//신청자가 wait테이블에 존재하는지 체크
+	public boolean isExistWaiting(String userId, String tableName) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement("select user_id, is_wait from " + tableName + " where user_id = ?");
+			pstmt.setString(1, userId);
+			rs = pstmt.executeQuery();
+			//값이 있으면 기다릴 수 없음.(= 업데이트를 해야함)
+			if (rs.next()) {
+				return true;
+			}
+			
+			return false;
+		} catch (Exception ex) {
+			System.out.println("오류 발생 : " + ex);
+		} finally {
+			close(conn, pstmt);
+		}
+		return false;
+	}
+	
+	// 일반 매칭 - 파티원 insert
+	public void insertWaitMember(String userId) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement("INSERT INTO member_wait_tbl(user_id) VALUES (?)");
+			pstmt.setString(1, userId);
+			pstmt.executeUpdate();
+			
+			System.out.println("(DAO - insertWaitMember)"+userId+" 파티원으로 insert");
+		} catch (Exception ex) {
+			System.out.println("오류 발생 : " + ex);
+		} finally {
+			close(conn, pstmt);
+		}
+	}
+
+	// 일반 매칭 - 파티원 update
+	public void updateWaitMember(String userId) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		Timestamp now = new Timestamp(System.currentTimeMillis());
+
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement(
+					"update member_wait_tbl set is_wait = 1, waiting_time = ?, update_time = ?,  wouldUYN = 1 where user_id = ?");
+			pstmt.setTimestamp(1, now);
+			pstmt.setTimestamp(2, now);
+			pstmt.setString(3, userId);
+			pstmt.executeUpdate();
+			System.out.println("(DAO - insertWaitMember)"+userId+" 파티원으로 update");
+		} catch (Exception ex) {
+			System.out.println("오류 발생 : " + ex);
+		} finally {
+			close(conn, pstmt);
+		}
+	}
+
 }

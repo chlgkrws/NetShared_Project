@@ -22,4 +22,15 @@ public class MatchingService {
 	public boolean isPossibleToWaitLeader(String userId) {
 		return dao.isPossibleToWaitLeader(userId);
 	}
+	
+	//파티원 insert
+	public void insertMember(String userId) {
+		boolean isExist = dao.isExistWaiting(userId, "member_wait_tbl");
+		
+		if(!isExist) {
+			dao.insertWaitMember(userId);
+		}else {
+			dao.updateWaitMember(userId);
+		}
+	}
 }
