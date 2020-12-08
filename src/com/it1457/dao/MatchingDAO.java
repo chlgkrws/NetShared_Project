@@ -5,9 +5,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashSet;
 
-import com.it1457.vo.UserVO;
+import com.it1457.vo.LeaderVO;
+import com.it1457.vo.MemberVO;
 
 public class MatchingDAO {
 
@@ -146,12 +148,12 @@ public class MatchingDAO {
 		Connection conn = null;
 		PreparedStatement CheckAlreadyUsedPstmt = null;
 		String tableName = "leader_wait_tbl";
-		
+
 		ResultSet rs = null;
 		try {
 			conn = connect();
 			boolean isExist = isExistWaiting(userId, tableName);
-			
+
 			System.out.println("(DAO - isPossibleToWaitLeader) isExist : " + isExist);
 			// 이미 대기열에 존재한다면
 			if (isExist) {
@@ -180,7 +182,7 @@ public class MatchingDAO {
 		return false;
 	}
 
-	//신청자가 wait테이블에 존재하는지 체크
+	// 신청자가 wait테이블에 존재하는지 체크
 	public boolean isExistWaiting(String userId, String tableName) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -191,20 +193,21 @@ public class MatchingDAO {
 			pstmt = conn.prepareStatement("select user_id, is_wait from " + tableName + " where user_id = ?");
 			pstmt.setString(1, userId);
 			rs = pstmt.executeQuery();
-			//값이 있으면 기다릴 수 없음.(= 업데이트를 해야함)
+			// 값이 있으면 기다릴 수 없음.(= 업데이트를 해야함)
 			if (rs.next()) {
 				return true;
 			}
-			
+
 			return false;
 		} catch (Exception ex) {
 			System.out.println("오류 발생 : " + ex);
+			System.out.println("(DAO - isExistWaiting) 에러");
 		} finally {
 			close(conn, pstmt);
 		}
 		return false;
 	}
-	
+
 	// 일반 매칭 - 파티원 insert
 	public void insertWaitMember(String userId) {
 		Connection conn = null;
@@ -215,10 +218,11 @@ public class MatchingDAO {
 			pstmt = conn.prepareStatement("INSERT INTO member_wait_tbl(user_id) VALUES (?)");
 			pstmt.setString(1, userId);
 			pstmt.executeUpdate();
-			
-			System.out.println("(DAO - insertWaitMember)"+userId+" 파티원으로 insert");
+
+			System.out.println("(DAO - insertWaitMember)" + userId + " 파티원으로 insert");
 		} catch (Exception ex) {
 			System.out.println("오류 발생 : " + ex);
+			System.out.println("(DAO - insertWaitMember) 에러");
 		} finally {
 			close(conn, pstmt);
 		}
@@ -238,12 +242,118 @@ public class MatchingDAO {
 			pstmt.setTimestamp(2, now);
 			pstmt.setString(3, userId);
 			pstmt.executeUpdate();
-			System.out.println("(DAO - insertWaitMember)"+userId+" 파티원으로 update");
+			System.out.println("(DAO - insertWaitMember)" + userId + " 파티원으로 update");
+		} catch (Exception ex) {
+			System.out.println("오류 발생 : " + ex);
+			System.out.println("(DAO - insertWaitMember) 에러");
+		} finally {
+			close(conn, pstmt);
+		}
+	}
+
+	// 일반 매칭 - 파티장 insert
+	public void insertWaitLeader(String userId, String netId, String netPassword, int HNOM) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement(
+					"insert into leader_wait_tbl(user_id ,max_number_of_member, net_id, net_password) values(?,?,?,?) ");
+			pstmt.setString(1, userId);
+			pstmt.setInt(2, HNOM);
+			pstmt.setString(3, netId);
+			pstmt.setString(4, netPassword);
+			pstmt.executeUpdate();
+			System.out.println("(DAO - insertWaitLeader)" + userId + " 파티장으로 insert");
+		} catch (Exception ex) {
+			System.out.println("오류 발생 : " + ex);
+			System.out.println("(DAO - insertWaitLeader) 에러");
+		} finally {
+			close(conn, pstmt);
+		}
+	}
+
+	// 일반 매칭 - 파티장 update
+	public void updateWaitLeader(String userId, String netId, String netPassword, int HNOM) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		Timestamp now = new Timestamp(System.currentTimeMillis());
+
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement(
+					"update leader_wait_tbl set is_wait = 1, waiting_time = ?, update_time = ?,  wouldUYN = 1 where user_id = ?");
+			pstmt.setTimestamp(1, now);
+			pstmt.setTimestamp(2, now);
+			pstmt.setString(3, userId);
+			pstmt.executeUpdate();
+			System.out.println("(DAO - updateWaitLeader)" + userId + " 파티장으로 update");
+		} catch (Exception ex) {
+			System.out.println("오류 발생 : " + ex);
+			System.out.println("(DAO - updateWaitLeader)에러");
+		} finally {
+			close(conn, pstmt);
+		}
+	}
+
+	// 매칭 가능한 리더 찾기(맴버가 매칭 신청 시)
+	public LeaderVO searchLeaderToMatching() {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+			
+		LeaderVO leaderVO = new LeaderVO();
+		try {
+			pstmt = conn.prepareStatement("select * from leader_wait_tbl where is_wait = 1 order by waiting_time asc limit 1");
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				leaderVO.setUserId(rs.getString(1));
+				leaderVO.setWait(rs.getBoolean(2));
+				leaderVO.setNormal(rs.getBoolean(3));
+				leaderVO.setDcPercent(rs.getInt(4));
+				leaderVO.setMaxNumberOfMember(rs.getInt(5));
+				leaderVO.setHowLongUse(rs.getInt(6));
+				leaderVO.setNetId(rs.getString(7));
+				leaderVO.setNetPassword(rs.getString(8));
+				leaderVO.setWaitingTime(rs.getTimestamp(9));
+				leaderVO.setCreatedTime(rs.getTimestamp(10));
+				leaderVO.setUpdateTime(rs.getTimestamp(11));
+				leaderVO.setWouldUYN(rs.getBoolean(12));
+			}
+			return leaderVO;
+			
+		} catch (Exception ex) {
+			System.out.println("오류 발생 : " + ex);
+			System.out.println("(DAO - searchLeaderToMatching)에러");
+		} finally {
+			close(conn, pstmt);
+		}
+		return leaderVO;
+	}
+
+	// 매칭 가능한 맴버 찾기(리더가 매칭 신청 시)
+	public ArrayList<MemberVO> searchMemberToMatching() {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		ArrayList<MemberVO> al = new ArrayList<MemberVO>();
+		MemberVO memberVO = null;
+		
+		try {
+			pstmt = conn.prepareStatement("select * from member_wait_tbl where is_wait = 1 order by waiting_time asc limit 3");
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				memberVO = new MemberVO();
+				
+			}
+			
+			
 		} catch (Exception ex) {
 			System.out.println("오류 발생 : " + ex);
 		} finally {
 			close(conn, pstmt);
 		}
 	}
-
 }
