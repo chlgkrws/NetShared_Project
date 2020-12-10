@@ -15,7 +15,7 @@ public class BoardViewController implements Controller {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			String preBoardId = request.getParameter("boardId"); // 파라미터로 게시물id값을 받아옴
-			int boardId = Integer.parseInt(preBoardId);
+			Integer boardId = Integer.parseInt(preBoardId);
 
 			BoardService boardService = BoardService.getInstance();
 			BoardVO boardVO = boardService.getView(boardId);

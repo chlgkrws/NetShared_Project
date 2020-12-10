@@ -24,8 +24,11 @@ public class LoginController implements Controller {
 			UserVO userVO = service.userSearch(id);
 
 			if (!userVO.isWouldUYN()) {
-				request.setAttribute("error", "아이디와 비밀번호를 확인해주세요.");
-				HttpUtil.forward(request, response, "/views/login/login.jsp");
+				/*
+				 * request.setAttribute("error", "아이디와 비밀번호를 확인해주세요.");
+				 * HttpUtil.forward(request, response, "/views/login/login.jsp");
+				 */
+				HttpUtil.alertToJsp(request, response, "/views/login/login.jsp", "아이디와 비밀번호를 확인해주세요.");
 				return;
 			}
 			if (userVO.getPassword().equals(password)) {
@@ -33,15 +36,14 @@ public class LoginController implements Controller {
 				HttpUtil.forward(request, response, "views/login/login_session.jsp");
 				return;
 			} else {
-				request.setAttribute("error", "아이디와 비밀번호를 확인해주세요.");
-				HttpUtil.forward(request, response, "/views/login/login.jsp");
+				HttpUtil.alertToJsp(request, response, "/views/login/login.jsp", "아이디와 비밀번호를 확인해주세요.");
 				return;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			request.setAttribute("error", "아이디와 비밀번호를 확인해주세요");
 			System.out.println("LoginController 에러");
-			HttpUtil.forward(request, response, "/views/login/login.jsp");
+			HttpUtil.alertToJsp(request, response, "/views/login/login.jsp", "아이디와 비밀번호를 확인해주세요.");
+			return;
 		}
 	}
 }

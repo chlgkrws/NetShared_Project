@@ -14,7 +14,7 @@ public class HttpUtil {
 			System.out.println("forward 오류 : " + ex);
 		}
 	}
-
+	
 	public static void redirect(HttpServletRequest request, HttpServletResponse response, String path) {
 		try {
 			response.sendRedirect(path);

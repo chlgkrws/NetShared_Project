@@ -168,6 +168,52 @@ public class BoardDAO {
 		return list;
 	}
 
+	// 글 리스트 조회(내글보기 다형성)
+	public ArrayList<BoardVO> getBoardList(int displayPost, int postNum, String userId) {
+		ArrayList<BoardVO> list = new ArrayList<>();
+
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		BoardVO board = null;
+
+		try {
+			conn = connect();
+			pstmt = conn
+					.prepareStatement("select * from board_tbl where user_id = ? order by board_id desc limit ?, ?");
+			pstmt.setString(1, userId);
+			pstmt.setInt(2, displayPost);
+			pstmt.setInt(3, postNum);
+			rs = pstmt.executeQuery();
+			System.out.println(rs.getFetchSize());
+			while (rs.next()) {
+				if (!rs.getBoolean(9)) {
+					continue;
+				}
+
+				board = new BoardVO();
+				board.setBoardId(rs.getInt(1));
+				board.setUserId(rs.getString(2));
+				board.setWriter(rs.getString(3));
+				board.setTitle(rs.getString(4));
+				board.setContent(rs.getString(5));
+				board.setCreatedTime(new SimpleDateFormat("yyyy-MM-dd").format(rs.getTimestamp(6)));
+				board.setRecommend(rs.getInt(7));
+				board.setGenre(rs.getString(8));
+				board.setValid(rs.getBoolean(9));
+				list.add(board);
+			}
+
+		} catch (Exception ex) {
+			System.out.println("오류 발생 : " + ex);
+		} finally {
+			close(conn, pstmt, rs);
+		}
+
+		return list;
+	}
+
 	// 글 상세보기
 	public BoardVO getView(int boardId) {
 		Connection conn = null;
@@ -226,6 +272,32 @@ public class BoardDAO {
 		return -1;
 	}
 
+	// 페이지를 위한 게시물 갯수 카운트(내글보기
+	public int getBoardCount(String userId) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		BoardVO board = null;
+		ResultSet rs = null;
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement("select count(board_id) from board_tbl where user_id = ?");
+			pstmt.setString(1, userId);
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+		} catch (Exception ex) {
+			System.out.println("오류 발생 : " + ex);
+		} finally {
+			close(conn, pstmt);
+		}
+		// -1일 경우 에러
+		System.out.println("getBoardCount 에러");
+		return -1;
+	}
+
 	// 추천한 계정 찾기
 	public int checkLike(int boardId, String userId) {
 		Connection conn = null;
@@ -238,10 +310,10 @@ public class BoardDAO {
 			pstmt.setInt(1, boardId);
 			pstmt.setString(2, userId);
 			rs = pstmt.executeQuery();
-			
+
 			if (rs.next()) {
 				return 1;
-			}else {
+			} else {
 				return 0;
 			}
 		} catch (Exception ex) {
@@ -274,6 +346,25 @@ public class BoardDAO {
 		}
 	}
 
+	// 추천한 계정 삭제
+	public void deleteLikedUser(int boardId, String userId) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement("delete from board_like_tbl where board_id = ? and liked_user_id = ?");
+			pstmt.setInt(1, boardId);
+			pstmt.setString(2, userId);
+
+			pstmt.executeUpdate();
+		} catch (Exception ex) {
+			System.out.println("오류 발생 : " + ex);
+		} finally {
+			close(conn, pstmt);
+		}
+	}
+
 	// 추천수 증가
 	public void updateLike(int boardId) {
 		Connection conn = null;
@@ -283,6 +374,24 @@ public class BoardDAO {
 			conn = connect();
 			pstmt = conn
 					.prepareStatement("Update `it1457`.`board_tbl` set recommend = recommend + 1 where board_id = ?");
+			pstmt.setInt(1, boardId);
+			pstmt.executeUpdate();
+		} catch (Exception ex) {
+			System.out.println("오류 발생 : " + ex);
+		} finally {
+			close(conn, pstmt);
+		}
+	}
+
+	// 추천수 감소
+	public void updateLikeDown(int boardId) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = connect();
+			pstmt = conn
+					.prepareStatement("Update `it1457`.`board_tbl` set recommend = recommend - 1 where board_id = ?");
 			pstmt.setInt(1, boardId);
 			pstmt.executeUpdate();
 		} catch (Exception ex) {

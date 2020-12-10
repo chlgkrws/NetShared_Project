@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.it1457.dao.MatchingDAO;
 import com.it1457.vo.LeaderVO;
+import com.it1457.vo.MatchingVO;
 import com.it1457.vo.MemberVO;
 
 public class MatchingService {
@@ -56,8 +57,22 @@ public class MatchingService {
 	
 	//대기 중인 파티원 조회
 	public ArrayList<MemberVO> searchMemberToMatching() {
-		return dao.serachMemberToMatching();
+		return dao.searchMemberToMatching();
+	}
+	
+	//매칭 아이디 조회
+	public int getMatchingId(MatchingVO matchingVO) {
+		return dao.getMatchingId(matchingVO);
 	}
 
-
+	//파티 맴버 삽입
+	public void insertPartyMember(MemberVO memberVO) {
+		dao.insertPartyMember(memberVO);
+	}
+	
+	//member_wait안에 is_wait데이터 false로 변환
+	public void updateIswaitToFalseInMemberWait(MemberVO memberVO) {
+		dao.updateIswaitToFalseInMemberWait(memberVO);
+	}
+	
 }

@@ -10,7 +10,7 @@
 	<!-- 글쓰기 모달창 -->
 	<div class="replyModal">
 		<div class="modalContent">
-			<form action="/boardWrite.do" method="post">
+			<form action="/boardwrite.do" method="post">
 				<div id="title"
 					style="height: 110px; padding: 10px; background-color: rgb(201, 255, 234);">
 					<div style="width: 10%;">

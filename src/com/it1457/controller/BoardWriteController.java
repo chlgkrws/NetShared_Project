@@ -46,7 +46,7 @@ public class BoardWriteController implements Controller {
 			} else {
 				boardService.boardWrite(boardVO);
 			}
-			HttpUtil.redirect(request, response, "/boardList.do?num=1"); // 게시물목록으로 이동시켜주는 컨트롤러로 이동
+			HttpUtil.redirect(request, response, "/boardlist.do?num=1"); // 게시물목록으로 이동시켜주는 컨트롤러로 이동
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("BoardWrite Controller 에러");

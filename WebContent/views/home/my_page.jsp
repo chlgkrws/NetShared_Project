@@ -75,7 +75,7 @@
 <script type="text/javascript">
 	function wouldDelete() {
 		if (confirm("정말 탈퇴하시겠습니까?")) {
-			location.href = 'withdrawUser.do';
+			location.href = 'withdrawuser.do';
 		} else {
 			return;
 		}

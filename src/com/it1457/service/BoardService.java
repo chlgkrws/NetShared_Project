@@ -16,51 +16,67 @@ public class BoardService {
 		return service;
 	}
 
-	//글 작성
+	// 글 작성
 	public void boardWrite(BoardVO boardVO) {
 		dao.boardWrite(boardVO);
 	}
-	
-	//글 수정
+
+	// 글 수정
 	public void boardUpdate(BoardVO boardVO) {
 		dao.boardUpdate(boardVO);
 	}
-	
-	//글 삭제
+
+	// 글 삭제
 	public void boardDelete(int boardId) {
 		dao.boardDelete(boardId);
 	}
-	
-	//글 리스트 조회
-	public ArrayList<BoardVO> getBoardList(int displayPost, int postNum){
+
+	// 글 리스트 조회
+	public ArrayList<BoardVO> getBoardList(int displayPost, int postNum) {
 		return dao.getBoardList(displayPost, postNum);
 	}
 	
-	//글 상세보기
+	// 내글 조회
+	public ArrayList<BoardVO> getBoardList(int displayPost, int postNum, String userId) {
+		return dao.getBoardList(displayPost, postNum, userId);
+	}
+
+	// 글 상세보기
 	public BoardVO getView(int boardId) {
 		return dao.getView(boardId);
 	}
-	
-	//게시글 갯수
+
+	// 게시글 갯수
 	public int getBoardCount() {
 		return dao.getBoardCount();
 	}
-	
-	//추천한 계정 조회
+
+	// 추천한 계정 조회
 	public int checkLike(int boardId, String userId) {
 		return dao.checkLike(boardId, userId);
 	}
-	
-	//추천한 계정 삽입
+
+	// 추천한 계정 삽입
 	public void insertLikedUser(int boardId, String userId) {
 		dao.insertLikedUser(boardId, userId);
 	}
-	
-	//추천수 증가
+
+	// 추천한 계정 삭제
+	public void deleteLikedUser(int boardId, String userId) {
+		dao.deleteLikedUser(boardId, userId);
+	}
+
+	// 추천수 증가
 	public void updateLike(int boardId) {
+		dao.updateLikeDown(boardId);
+	}
+
+	// 추천수 감소
+	public void updateLikeDown(int boardId) {
 		dao.updateLike(boardId);
 	}
 	
+
 	/*
 	 * //FrontController에 있는 boardHm에 데이터 가져오기 **데이터의 흐름을 보기 위해 짠 코드** public
 	 * LinkedHashMap<Integer, BoardVO> getData() { setDate(); FrontController.flag =

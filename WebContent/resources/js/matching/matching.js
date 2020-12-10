@@ -44,7 +44,7 @@ function matching_button_click(param) {
 function hc_button_click(param) {
 	var item = param.id;
 
-	document.getElementById("HCButton1").style.borderWidth = '1px';
+	/*document.getElementById("HCButton1").style.borderWidth = '1px';*/
 	document.getElementById("HCButton2").style.borderWidth = '1px';
 	document.getElementById("HCButton3").style.borderWidth = '1px';
 	document.getElementById("HCButton4").style.borderWidth = '1px';

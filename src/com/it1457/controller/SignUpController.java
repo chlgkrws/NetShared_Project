@@ -19,14 +19,14 @@ public class SignUpController implements Controller {
 			String id = request.getParameter("id");
 			String password = request.getParameter("password");
 			String userName = request.getParameter("username");
-			String identity = request.getParameter("identity");
+			//String identity = request.getParameter("identity");
 			String phone = request.getParameter("phone");
 			String account = request.getParameter("account");
 
 			userVO.setId(id);
 			userVO.setPassword(password);
 			userVO.setUserName(userName);
-			userVO.setIdentity(identity);
+			userVO.setIdentity("000000");
 			userVO.setPhone(phone);
 			userVO.setAccount(account);
 

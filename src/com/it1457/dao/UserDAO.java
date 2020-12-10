@@ -69,7 +69,7 @@ public class UserDAO {
 			pstmt.setString(1, userVO.getId());
 			pstmt.setString(2, userVO.getPassword());
 			pstmt.setString(3, userVO.getUserName());
-			pstmt.setString(4, userVO.getIdentity());
+			pstmt.setString(4, "000000");
 			pstmt.setString(5, userVO.getPhone());
 			pstmt.setString(6, userVO.getAccount());
 			pstmt.setString(7, "0");

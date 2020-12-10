@@ -27,7 +27,7 @@
 						style="float: left; width: 33%; line-height: 80px;">소개</a>
 				</div>
 				<div>
-					<a href="/boardList.do?num=1"
+					<a href="/boardlist.do?num=1"
 						style="float: left; width: 33%; line-height: 80px;">커뮤니티</a>
 				</div>
 				<div>
@@ -53,7 +53,7 @@
 				<div>
 					<a href="/views/login/logout.jsp" id="logout"
 						style="font-size: 10px; float: right; margin-right: 15px;">로그아웃</a>
-					<a href="/myPage.do"><img src="/resources/img/myPage.png"
+					<a href="/mypage.do"><img src="/resources/img/myPage.png"
 						style="width: 60px; float: right; margin-right: 2%; margin-top: 18px;"></a>
 					<a style="font-size: 15px; float: right; margin-right: 15px;"><%=session.getAttribute("username")%>님
 						안녕하세요 </a>

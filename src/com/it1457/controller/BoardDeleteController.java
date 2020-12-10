@@ -14,12 +14,12 @@ public class BoardDeleteController implements Controller {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			String preBoardId = request.getParameter("boardId");
-			int boardId = Integer.parseInt(preBoardId);
+			Integer boardId = Integer.parseInt(preBoardId);
 
 			BoardService service = BoardService.getInstance();
 			service.boardDelete(boardId);
 
-			HttpUtil.redirect(request, response, "/boardList.do?num=1");
+			HttpUtil.redirect(request, response, "/boardlist.do?num=1");
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("BoardDeleteController 에러");

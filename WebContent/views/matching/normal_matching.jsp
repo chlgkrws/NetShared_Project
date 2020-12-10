@@ -69,10 +69,10 @@
 								value="<%=session.getAttribute("id")%>" />
 							<input type="hidden" id="headCount" name="headCount"/>
 							<ul id="numberOfMember">
-								<li><button type="button" id="HCButton1"
+	<!-- 							<li><button type="button" id="HCButton1"
 										onclick="hc_button_click(this)"
 										onmouseover="hc_button_on(this)"
-										onmouseout="hc_button_out(this)">1인</button></li>
+										onmouseout="hc_button_out(this)">1인</button></li> -->
 								<li><button type="button" id="HCButton2"
 										onclick="hc_button_click(this)"
 										onmouseover="hc_button_on(this)"

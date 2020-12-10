@@ -23,7 +23,7 @@
 					<p
 						style="font-weight: 600; font-size: 30px; color: rgb(82, 82, 82);">회원가입</p>
 				</div>
-				<form action="/userInsert.do" method="post"
+				<form action="/userinsert.do" method="post"
 					onsubmit="return sign_up();">
 					<div class="sign_up_div">
 						<p>아이디</p>
@@ -50,11 +50,11 @@
 					<input type="text" placeholder="이름을 입력하세요." id="username"
 						name="username" class="sign_up_input" />
 
-					<div class="sign_up_div">
+					<!-- <div class="sign_up_div">
 						<p>주민등록번호</p>
 					</div>
 					<input type="text" placeholder="주민등록번호 앞자리 ex) 951007 "
-						id="identity" name="identity" class="sign_up_input" />
+						id="identity" name="identity" class="sign_up_input" /> -->
 
 					<div class="sign_up_div">
 						<p>핸드폰 번호</p>
@@ -86,7 +86,7 @@
 		var password = document.getElementById("password").value;
 		var password_valid = document.getElementById("password_valid").value;
 		var username = document.getElementById("username").value;
-		var identity = document.getElementById("identity").value;
+		//var identity = document.getElementById("identity").value;
 		var phone = document.getElementById("phone").value;
 		var account = document.getElementById("account").value;
 		
@@ -96,7 +96,7 @@
 		var eng = password.search(/[a-z]/ig);
 		var spe = password.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
 		var usernameReg = /^[가-힣]{2,4}$/g;								
-		var identityReg = /^[0-9]{6}$/g;	
+		//var identityReg = /^[0-9]{6}$/g;	
 		var phoneReg = /^01[016][0-9]{3,4}[0-9]{4}$/g;
 		var accountReg = /^[0-9]{5,30}$/g;									
 		
@@ -135,10 +135,10 @@
 		}
 		
 		
-		if(!identityReg.test(identity)){
+		/* if(!identityReg.test(identity)){
 			alert("주민등록번호 앞자리 6자리를 적어주세요.");
 			return false;
-		}
+		} */
 		
 		alert("계정이 생성되었습니다!")
 		

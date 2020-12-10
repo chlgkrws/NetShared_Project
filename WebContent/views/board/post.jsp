@@ -30,7 +30,7 @@
 			<c:if test="${id eq board.userId}">
 				<div style="margin-bottom: 10px; height: 30px">
 					<div class="modify_delete">
-						<form action="/boardDelete.do" method="get"
+						<form action="/boarddelete.do" method="get"
 							onsubmit="return delete_post();">
 							<input type="hidden" name="boardId" value='${board.boardId }'>
 							<button type="submit" id="delete" class="post_list">삭제</button>
@@ -63,14 +63,14 @@
 			<div style="float: right;">
 				<div class="modify_delete">
 					<button type="button" class="post_list"
-						onclick="location.href='/boardList.do?num=1'">목록</button>
+						onclick="location.href='/boardlist.do?num=1'">목록</button>
 					<div class="modify_delete"></div>
 				</div>
 				<div class="modify_delete">
 					<!-- 자신 게시물이나, 로그인이 안되어있으면 추천버튼 비활성화 -->
 					<c:if test="${id ne board.userId }">
 						<c:if test="${id ne null }">
-							<form action="likeUp.do" method="post" style="height: 30px;">
+							<form action="likeup.do" method="post" style="height: 30px;">
 								<input type="hidden" name="id" value="${id }" /> <input
 									type="hidden" name="boardId" value="${board.boardId }" />
 								<button type="submit" class="post_rec">추천</button>

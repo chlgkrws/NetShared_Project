@@ -18,13 +18,25 @@ public class BoardListController implements Controller {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			BoardService boardService = BoardService.getInstance();
-			int num = Integer.parseInt(request.getParameter("num"));
+			Integer num = Integer.parseInt(request.getParameter("num"));
+			String userId = request.getParameter("userid");
 			
 			Page page = new Page();
 			page.setNum(num);
 			page.setCount(boardService.getBoardCount());
 			
-			ArrayList<BoardVO> list = boardService.getBoardList(page.getDisplayPost(), page.getPostNum());
+			
+			ArrayList<BoardVO> list;
+			if(userId == null) {
+				list = boardService.getBoardList(page.getDisplayPost(), page.getPostNum());				//전체보기
+				request.setAttribute("unCheck", true);
+				request.setAttribute("check", false);
+			}else {
+				list = boardService.getBoardList(page.getDisplayPost(), page.getPostNum(), userId);		//내글보기
+				request.setAttribute("check", true);
+				request.setAttribute("unCheck", false);
+			}
+			
 
 			request.setAttribute("list", list);
 			request.setAttribute("select", num);

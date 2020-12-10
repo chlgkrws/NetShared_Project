@@ -20,16 +20,16 @@ public class FrontController  extends HttpServlet{
 	public void init(ServletConfig config) throws ServletException {			//서블릿이 실행될 때 요청 url에 따라 Controller를 나눠줌.
 		charset = config.getInitParameter("charset");
 		controllerList = new HashMap<String, Controller>();
-		controllerList.put("/userInsert.do", new SignUpController());
+		controllerList.put("/userinsert.do", new SignUpController());
 		controllerList.put("/userlogin.do", new LoginController());
-		controllerList.put("/boardList.do", new BoardListController());
-		controllerList.put("/boardView.do", new BoardViewController());
-		controllerList.put("/boardPost.do", new BoardPostController());
-		controllerList.put("/boardDelete.do", new BoardDeleteController());
-		controllerList.put("/boardWrite.do", new BoardWriteController());
-		controllerList.put("/myPage.do", new MyPageController());
-		controllerList.put("/withdrawUser.do", new WithdrawalUserController());
-		controllerList.put("/likeUp.do", new LikeUpController());
+		controllerList.put("/boardlist.do", new BoardListController());
+		controllerList.put("/boardview.do", new BoardViewController());
+		controllerList.put("/boardpost.do", new BoardPostController());
+		controllerList.put("/boarddelete.do", new BoardDeleteController());
+		controllerList.put("/boardwrite.do", new BoardWriteController());
+		controllerList.put("/mypage.do", new MyPageController());
+		controllerList.put("/withdrawuser.do", new WithdrawalUserController());
+		controllerList.put("/likeup.do", new LikeUpController());
 		controllerList.put("/matchingmaster.do", new MatchingMasterController());
 	}
 	

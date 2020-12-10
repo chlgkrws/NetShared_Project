@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import com.it1457.vo.LeaderVO;
+import com.it1457.vo.MatchingVO;
 import com.it1457.vo.MemberVO;
 
 public class MatchingDAO {
@@ -301,13 +302,15 @@ public class MatchingDAO {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-			
+
 		LeaderVO leaderVO = new LeaderVO();
 		try {
-			pstmt = conn.prepareStatement("select * from leader_wait_tbl where is_wait = 1 order by waiting_time asc limit 1");
+			conn = connect();
+			pstmt = conn.prepareStatement(
+					"select * from leader_wait_tbl where is_wait = 1 order by waiting_time asc limit 1");
 			rs = pstmt.executeQuery();
-			
-			if(rs.next()) {
+
+			if (rs.next()) {
 				leaderVO.setUserId(rs.getString(1));
 				leaderVO.setWait(rs.getBoolean(2));
 				leaderVO.setNormal(rs.getBoolean(3));
@@ -322,7 +325,7 @@ public class MatchingDAO {
 				leaderVO.setWouldUYN(rs.getBoolean(12));
 			}
 			return leaderVO;
-			
+
 		} catch (Exception ex) {
 			System.out.println("오류 발생 : " + ex);
 			System.out.println("(DAO - searchLeaderToMatching)에러");
@@ -339,19 +342,130 @@ public class MatchingDAO {
 		ResultSet rs = null;
 		ArrayList<MemberVO> al = new ArrayList<MemberVO>();
 		MemberVO memberVO = null;
-		
+
 		try {
-			pstmt = conn.prepareStatement("select * from member_wait_tbl where is_wait = 1 order by waiting_time asc limit 3");
+			conn = connect();
+			pstmt = conn.prepareStatement(
+					"select * from member_wait_tbl where is_wait = 1 order by waiting_time asc limit 3");
 			rs = pstmt.executeQuery();
-			
-			while(rs.next()) {
+
+			while (rs.next()) {
 				memberVO = new MemberVO();
-				
+				memberVO.setUserId(rs.getString(1));
+				memberVO.setWait(rs.getBoolean(2));
+				memberVO.setWaitingTime(rs.getTimestamp(3));
+				memberVO.setCreatedTime(rs.getTimestamp(4));
+				memberVO.setUpdateTime(rs.getTimestamp(5));
+				memberVO.setWouldUYN(rs.getBoolean(6));
 			}
 			
+			return al;
+
+		} catch (Exception ex) {
+			System.out.println("오류 발생 : " + ex);
+			System.out.println("(DAO - searchMemberToMatching)에러");
+		} finally {
+			close(conn, pstmt);
+		}
+		return al;
+	}
+
+	// 매칭아이디 조회
+	public int getMatchingId(MatchingVO matchingVO) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement("select matching_id from matching_tbl where leader_id = ?");
+			
+			insertMatchingInfo(matchingVO);
+			
+			pstmt.setString(1, matchingVO.getLeader_id());
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				return rs.getInt(1);
+			}else {
+				System.out.println("(DAO - getMatchingId) matching_id 값 없음.");
+				return -1;
+			}
 			
 		} catch (Exception ex) {
 			System.out.println("오류 발생 : " + ex);
+			System.out.println("(DAO - getMatchingId) 에러");
+		} finally {
+			close(conn, pstmt);
+		}
+		return -1;
+	}
+	
+	// 매칭테이블 데이터 삽입
+	public void insertMatchingInfo(MatchingVO matchingVO) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		/*ResultSet rs = null;
+			matchingVO.setLeader_id(userId);
+		matchingVO.setDcPercent(0);
+		matchingVO.setMaxNumberOfMember(headCount);
+		matchingVO.setFull(isFull);
+		matchingVO.setNormal(true);
+		matchingVO.setHowLongUse(0);
+		matchingVO.setNet_id(netId);
+		matchingVO.setNet_id(netPassword);*/
+		
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement("insert into matching_tbl"
+					+ "(leader_id, dc_percent, max_number_of_member, is_full, is_normal, how_long_use, net_id, net_password) "
+					+ "values(?,?,?,?,?,?,?,?)");
+			pstmt.setString(1, matchingVO.getLeader_id());
+			pstmt.setInt(2, matchingVO.getDcPercent());
+			pstmt.setInt(3, matchingVO.getMaxNumberOfMember());
+			pstmt.setBoolean(4, matchingVO.isFull());
+			pstmt.setBoolean(5, matchingVO.isNormal());
+			pstmt.setInt(6, matchingVO.getHowLongUse());
+			pstmt.setString(7, matchingVO.getNet_id());
+			pstmt.setString(8, matchingVO.getNet_password());
+			pstmt.execute();
+			
+			System.out.println("");
+		} catch (Exception ex) {
+			System.out.println("오류 발생 : " + ex);
+			System.out.println("(DAO - insertMatchingInfo)에러");
+		} finally {
+			close(conn, pstmt);
+		}
+	}
+	
+	//파티 맴버 삽입
+	public void insertPartyMember(MemberVO memberVO) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement("");
+		}catch (Exception ex) {
+			System.out.println("오류 발생 : " + ex);
+			System.out.println("(DAO - insertPartyMember)에러");
+		} finally {
+			close(conn, pstmt);
+		}
+	}
+	
+	//member_wait안에 is_wait데이터 false로 변환
+	public void updateIswaitToFalseInMemberWait(MemberVO memberVO) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement("");
+		}catch (Exception ex) {
+			System.out.println("오류 발생 : " + ex);
+			System.out.println("(DAO - updateIswaitToFalseInMemberWait)에러");
 		} finally {
 			close(conn, pstmt);
 		}
