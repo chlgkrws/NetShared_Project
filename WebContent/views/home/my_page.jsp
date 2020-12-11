@@ -61,9 +61,13 @@
 				<div class="my_page_right">
 					<h3>ㆍㆍㆍㆍㆍㆍㆍ</h3>
 				</div>
+				
+				<div>
+					<a href="views/login/check_password.jsp">개인정보 수정</a>
+				</div>
 			</div>
 
-			<hr style="width: 80%;">
+			<hr style="width: 80%; margin-top: 40px;">
 
 			<h3 style="text-decoration: underline; color: rgb(189, 189, 189);">
 				<a href='javascript:void(0);' onclick="wouldDelete();">회원 탈퇴</a>

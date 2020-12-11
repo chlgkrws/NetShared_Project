@@ -18,7 +18,8 @@ public class BoardListController implements Controller {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			BoardService boardService = BoardService.getInstance();
-			Integer num = Integer.parseInt(request.getParameter("num"));
+			String preNum = request.getParameter("num");
+			Integer num = Integer.parseInt(preNum);
 			String userId = request.getParameter("userid");
 			
 			Page page = new Page();

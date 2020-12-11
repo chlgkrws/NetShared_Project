@@ -118,6 +118,24 @@ div.right {
 	padding-top: 30px;
 }
 
+#check_password{
+	margin: 0 auto;
+	width: 400px;
+	height: 270px;
+	background-color: rgb(254, 254, 255);
+	border: 1px solid rgb(214, 214, 214);
+	padding-top: 30px;
+}
+
+#modify_info{
+	margin: 0 auto;
+	width: 400px;
+	height: 420px;
+	background-color: rgb(254, 254, 255);
+	border: 1px solid rgb(214, 214, 214);
+	padding-top: 30px;
+}
+
 .login_button {
 	width: 250px;
 	height: 40px;
@@ -242,4 +260,10 @@ div.matching_apply p {
 	width: 300px;
 	height: 30px;
 	text-align: left;
+}
+.modify_input{
+		width: 300px;
+	height: 30px;
+	text-align: left;
+	margin-bottom: 10px;
 }

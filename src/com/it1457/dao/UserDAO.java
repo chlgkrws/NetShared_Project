@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 
 import com.it1457.vo.UserVO;
 
@@ -112,6 +113,29 @@ public class UserDAO {
 		}
 
 		return userVO;
+	}
+	
+	//개인정보 수정
+	public int updateUserInfo(UserVO userVO) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		Timestamp now = new Timestamp(System.currentTimeMillis());
+		
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement("Update user_tbl set password = ?, phone = ?, account = ?, update_time = ? where user_id = ?");
+			pstmt.setString(1, userVO.getPassword());
+			pstmt.setString(2, userVO.getPhone());
+			pstmt.setString(3, userVO.getAccount());
+			pstmt.setTimestamp(4, now);
+			pstmt.setString(5, userVO.getId());
+			return pstmt.executeUpdate();		//1이면 정상
+		} catch (Exception ex) {
+			System.out.println("오류 발생 : " + ex);
+		} finally {
+			close(conn, pstmt);
+		}
+		return -2;
 	}
 
 	// 회원탈퇴

@@ -12,6 +12,7 @@ public class MatchingVO {
 	private int howLongUse;
 	private String net_id;
 	private String net_password;
+	private Timestamp waitingTime;
 	private Timestamp createdTime;
 	private Timestamp updateTime;
 	private boolean wouldUYN;
@@ -88,6 +89,12 @@ public class MatchingVO {
 	}
 	public void setWouldUYN(boolean wouldUYN) {
 		this.wouldUYN = wouldUYN;
+	}
+	public Timestamp getWaitingTime() {
+		return waitingTime;
+	}
+	public void setWaitingTime(Timestamp waitingTime) {
+		this.waitingTime = waitingTime;
 	}
 	
 	

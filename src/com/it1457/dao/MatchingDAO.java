@@ -357,8 +357,9 @@ public class MatchingDAO {
 				memberVO.setCreatedTime(rs.getTimestamp(4));
 				memberVO.setUpdateTime(rs.getTimestamp(5));
 				memberVO.setWouldUYN(rs.getBoolean(6));
+				al.add(memberVO);
 			}
-			
+			System.out.println("(DAO - searchMemberToMatching)찾은 대기 맴버 수" + al.size());
 			return al;
 
 		} catch (Exception ex) {
@@ -379,19 +380,19 @@ public class MatchingDAO {
 		try {
 			conn = connect();
 			pstmt = conn.prepareStatement("select matching_id from matching_tbl where leader_id = ?");
-			
+
 			insertMatchingInfo(matchingVO);
-			
+
 			pstmt.setString(1, matchingVO.getLeader_id());
 			rs = pstmt.executeQuery();
-			
-			if(rs.next()) {
+
+			if (rs.next()) {
 				return rs.getInt(1);
-			}else {
+			} else {
 				System.out.println("(DAO - getMatchingId) matching_id 값 없음.");
 				return -1;
 			}
-			
+
 		} catch (Exception ex) {
 			System.out.println("오류 발생 : " + ex);
 			System.out.println("(DAO - getMatchingId) 에러");
@@ -400,21 +401,19 @@ public class MatchingDAO {
 		}
 		return -1;
 	}
-	
+
 	// 매칭테이블 데이터 삽입
 	public void insertMatchingInfo(MatchingVO matchingVO) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		/*ResultSet rs = null;
-			matchingVO.setLeader_id(userId);
-		matchingVO.setDcPercent(0);
-		matchingVO.setMaxNumberOfMember(headCount);
-		matchingVO.setFull(isFull);
-		matchingVO.setNormal(true);
-		matchingVO.setHowLongUse(0);
-		matchingVO.setNet_id(netId);
-		matchingVO.setNet_id(netPassword);*/
-		
+		/*
+		 * ResultSet rs = null; matchingVO.setLeader_id(userId);
+		 * matchingVO.setDcPercent(0); matchingVO.setMaxNumberOfMember(headCount);
+		 * matchingVO.setFull(isFull); matchingVO.setNormal(true);
+		 * matchingVO.setHowLongUse(0); matchingVO.setNet_id(netId);
+		 * matchingVO.setNet_id(netPassword);
+		 */
+
 		try {
 			conn = connect();
 			pstmt = conn.prepareStatement("insert into matching_tbl"
@@ -429,7 +428,7 @@ public class MatchingDAO {
 			pstmt.setString(7, matchingVO.getNet_id());
 			pstmt.setString(8, matchingVO.getNet_password());
 			pstmt.execute();
-			
+
 			System.out.println("");
 		} catch (Exception ex) {
 			System.out.println("오류 발생 : " + ex);
@@ -438,36 +437,114 @@ public class MatchingDAO {
 			close(conn, pstmt);
 		}
 	}
-	
-	//파티 맴버 삽입
-	public void insertPartyMember(MemberVO memberVO) {
+
+	// 파티 맴버 삽입
+	public void insertPartyMember(int matchingId, String leaderId, MemberVO memberVO) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		
+
 		try {
 			conn = connect();
-			pstmt = conn.prepareStatement("");
-		}catch (Exception ex) {
+			pstmt = conn.prepareStatement(
+					"insert into party_member_info_tbl(matching_id, member_id, " + "pay, leader_id) values(?,?,?,?)");
+
+			pstmt.setInt(1, matchingId);
+			pstmt.setString(2, memberVO.getUserId());
+			pstmt.setString(3, "3650");
+			pstmt.setString(4, leaderId);
+
+			pstmt.executeUpdate();
+		} catch (Exception ex) {
 			System.out.println("오류 발생 : " + ex);
 			System.out.println("(DAO - insertPartyMember)에러");
 		} finally {
 			close(conn, pstmt);
 		}
 	}
-	
-	//member_wait안에 is_wait데이터 false로 변환
+
+	// member_wait안에 is_wait데이터 false로 변환
 	public void updateIswaitToFalseInMemberWait(MemberVO memberVO) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		
+
 		try {
 			conn = connect();
-			pstmt = conn.prepareStatement("");
-		}catch (Exception ex) {
+			pstmt = conn.prepareStatement("update member_wait_tbl set is_wait = 0, wouldUYN = 0 where user_id = ?");
+			pstmt.setString(1, memberVO.getUserId());
+			pstmt.executeUpdate();
+		} catch (Exception ex) {
 			System.out.println("오류 발생 : " + ex);
 			System.out.println("(DAO - updateIswaitToFalseInMemberWait)에러");
 		} finally {
 			close(conn, pstmt);
 		}
+	}
+
+	// 매칭 중인 파티 중 빈자리가 있는지 확인
+	public MatchingVO canIJoinYourMatching() {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		MatchingVO matchingVO = null;
+		try {
+			conn = connect();
+			// 일단, 웨이팅시간으로
+			pstmt = conn
+					.prepareStatement("select * from matching_tbl where is_full = false order by waiting_time limit 1");
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				matchingVO = new MatchingVO();
+				matchingVO.setMatching_id(rs.getInt(1));
+				matchingVO.setLeader_id(rs.getString(2));
+				matchingVO.setDcPercent(rs.getInt(3));
+				matchingVO.setMaxNumberOfMember(rs.getInt(4));
+				matchingVO.setFull(rs.getBoolean(5));
+				matchingVO.setNormal(rs.getBoolean(6));
+				matchingVO.setHowLongUse(rs.getInt(7));
+				matchingVO.setNet_id(rs.getString(8));
+				matchingVO.setNet_password(rs.getString(9));
+				matchingVO.setWaitingTime(rs.getTimestamp(10));
+				matchingVO.setCreatedTime(rs.getTimestamp(11));
+				matchingVO.setUpdateTime(rs.getTimestamp(12));
+				matchingVO.setWouldUYN(rs.getBoolean(13));
+				return matchingVO;
+			}
+
+		} catch (Exception ex) {
+			System.out.println("오류 발생 : " + ex);
+			System.out.println("(DAO - canIJoinYourMatching)에러");
+		} finally {
+			close(conn, pstmt);
+		}
+		return matchingVO;
+	}
+
+	// 현재 매칭테이블에 매칭된 파티원 정보
+	public ArrayList<MemberVO> getPresentMatchingMember(int matchingId) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		ArrayList<MemberVO> al = new ArrayList<MemberVO>();
+		MemberVO memberVO = null;
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement("select *"
+					+ "from matching_tbl m, party_member_info_tbl p"
+					+ "where m.matching_id = ? and p.wouldUYN = true;");
+			pstmt.setInt(1, matchingId);
+			
+			rs = pstmt.executeQuery();
+			
+			
+			
+			
+		} catch (Exception ex) {
+			System.out.println("오류 발생 : " + ex);
+			System.out.println("(DAO - canIJoinYourMatching)에러");
+		} finally {
+			close(conn, pstmt);
+		}
+		return al;
 	}
 }

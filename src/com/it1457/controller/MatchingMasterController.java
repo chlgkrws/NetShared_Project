@@ -18,7 +18,7 @@ public class MatchingMasterController implements Controller {
 		try {
 			// 파티원인지 파티장인지
 			String isMember = (String) request.getParameter("ismember");
-			Integer headCount = getHeadCount((String) request.getParameter("headCount"));
+			Integer headCount = getHeadCount((String) request.getParameter("headCount"), isMember);
 			// String userId = (String) request.getSession().getAttribute("id"); 나중에는 사용하세요.
 			String userId = (String) request.getParameter("session_id");
 			String memberOk = "yes";
@@ -39,18 +39,34 @@ public class MatchingMasterController implements Controller {
 			// 파티원 신청 (중복되는 부분이 있다면,
 			if (isMember.equals(memberOk)) {
 				isPossibleRegister = service.isPossibleToWaitMember(userId);// 신청할 수 있는지 없는지.
-				// 신청할 수 있다면
+				// 파티원으로 신청할 수 있다면
 				if (isPossibleRegister) {
-
-					// 파티장이 있는지 없는지 체크
 					// 매칭테이블에 남는자리가 있는지 체크
-					// 매칭테이블에 남는자리가 있다면 wait_tbl에 is_wait를 false로 주고 매칭테이블에 인원수 추가+partymember테이블에
-					// 추가
-					// 매칭테이블에 남는자리가 없다면 wait_tbl에 파티장의 대기가 있는지 확인한다.
-					// 만약 파티장이 대기 한다면 매칭, 없다면
-
-					// wait 테이블에 is_wait를 true로 값을 넣어 insert해준다.
-					insertWaitMember(service, userId);
+					MatchingVO canIJoinYourMatching = service.canIJoinYourMatching();
+					
+					//이미 존재하는 매칭에 참여
+					if(canIJoinYourMatching != null) {
+						int matchingId = canIJoinYourMatching.getMatching_id();
+						int maxNumberOfMember = canIJoinYourMatching.getMaxNumberOfMember() - 1;		//4인 파티면 파티장을 제외하고 3명이므로, 범위(2~4)
+						ArrayList<MemberVO> presentNumberOfMember = service.getPresentMatchingMember(matchingId);
+						
+						// 새로 들어온 파티원이 마지막(최대 인원 충족)이라면
+						if(maxNumberOfMember == presentNumberOfMember.size() + 1) {
+							//matching isfull= true;
+						}
+						
+						// 매칭테이블에 남는자리가 있다면 member_wait_tbl에 is_wait,woulduyn를 false로 주고 매칭테이블에 인원수 추가+partymember테이블에
+						
+						// 추가 해주고. 만약 isFull을 true로 바꿔줘야한다면 수정.
+					}else if(false) {
+						// 파티장이 있는지 없는지 체크 
+						// 파티장이 있다면 추가(매칭테이블)
+						// 매칭테이블에 남는자리가 없다면 wait_tbl에 파티장의 대기가 있는지 확인한다.
+					}else {
+						// wait 테이블에 is_wait를 true로 값을 넣어 insert해준다.
+						insertWaitMember(service, userId);
+					}
+					
 					// 신청 할 수 없다면
 				} else {
 					HttpUtil.alertToJsp(request, response, "views/matching/normal_matching.jsp", "이미 신청하셨습니다.");
@@ -89,9 +105,10 @@ public class MatchingMasterController implements Controller {
 						// 대기중인 파티원이 1~3이 있다면 있는 수 만큼 매칭.
 						for(int i = 0; i < wantHeadCount; i++) {
 							MemberVO tempVO = waitingMember.get(i);
-							service.insertPartyMember(tempVO);
+							service.insertPartyMember(matchingId, userId, tempVO);
 							service.updateIswaitToFalseInMemberWait(tempVO);
 							//매칭된 파티원들을 party_member에 넣어주고 member_wait에 is_wait 0으로 바꿔줌
+							//해당 인원들에게 매칭이 되었다고 알림(해야함)
 						}
 						
 						//매칭 테이블에 넣고, 매칭 중인 파티원 테이블에도 데이터를 넣어준다.(매칭아이디 값에 해당하는)
@@ -99,9 +116,6 @@ public class MatchingMasterController implements Controller {
 						// 대기중인 파티원이 없다면 wait_tbl에 is_wait를 true로 주고 insert
 						insertWaitLeader(service, userId, netId, netPassword, headCount);
 					}
-					
-					
-					
 				// 신청할 수 없다면
 				} else {
 					HttpUtil.alertToJsp(request, response, "views/matching/normal_matching.jsp", "이미 신청하셨습니다.");
@@ -133,12 +147,14 @@ public class MatchingMasterController implements Controller {
 	}
 
 	// String headCount -> Integer headCount
-	public Integer getHeadCount(String headCount) {
+	public Integer getHeadCount(String headCount, String isMember) {
 		Integer HNOM;
-
-		if (headCount.equals("one")) {
-			HNOM = 1;
-		} else if (headCount.equals("two")) {
+		
+		if(isMember.equals("yes")) {
+			return 0;
+		}
+		
+		if (headCount.equals("two")) {
 			HNOM = 2;
 		} else if (headCount.equals("three")) {
 			HNOM = 3;
@@ -160,6 +176,6 @@ public class MatchingMasterController implements Controller {
 		matchingVO.setNormal(true);
 		matchingVO.setHowLongUse(0);
 		matchingVO.setNet_id(netId);
-		matchingVO.setNet_id(netPassword);
+		matchingVO.setNet_password(netPassword);
 	}
 }

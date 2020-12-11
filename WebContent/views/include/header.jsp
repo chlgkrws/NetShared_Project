@@ -57,6 +57,8 @@
 						style="width: 60px; float: right; margin-right: 2%; margin-top: 18px;"></a>
 					<a style="font-size: 15px; float: right; margin-right: 15px;"><%=session.getAttribute("username")%>님
 						안녕하세요 </a>
+						
+					
 				</div>
 			</div>
 			<%

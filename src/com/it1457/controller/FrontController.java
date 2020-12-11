@@ -31,6 +31,8 @@ public class FrontController  extends HttpServlet{
 		controllerList.put("/withdrawuser.do", new WithdrawalUserController());
 		controllerList.put("/likeup.do", new LikeUpController());
 		controllerList.put("/matchingmaster.do", new MatchingMasterController());
+		controllerList.put("/checkpassword.do", new CheckPasswordController());
+		controllerList.put("/modifyinfo.do", new ModifyInfoController());
 	}
 	
 	@Override

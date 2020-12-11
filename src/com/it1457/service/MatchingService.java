@@ -66,13 +66,23 @@ public class MatchingService {
 	}
 
 	//파티 맴버 삽입
-	public void insertPartyMember(MemberVO memberVO) {
-		dao.insertPartyMember(memberVO);
+	public void insertPartyMember(int matchingId, String leaderId, MemberVO memberVO) {
+		dao.insertPartyMember(matchingId, leaderId, memberVO);
 	}
 	
 	//member_wait안에 is_wait데이터 false로 변환
 	public void updateIswaitToFalseInMemberWait(MemberVO memberVO) {
 		dao.updateIswaitToFalseInMemberWait(memberVO);
+	}
+	
+	//매칭 중인 파티 중 빈자리가 있는지 확인
+	public MatchingVO canIJoinYourMatching() {
+		return dao.canIJoinYourMatching();
+	}
+	
+	//현재 매칭테이블에 매칭된 파티원 수
+	public ArrayList<MemberVO> getPresentMatchingMember(int matchingId) {
+		return dao.getPresentMatchingMember(matchingId);
 	}
 	
 }
