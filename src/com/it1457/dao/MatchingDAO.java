@@ -303,7 +303,7 @@ public class MatchingDAO {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
-		LeaderVO leaderVO = new LeaderVO();
+		LeaderVO leaderVO = null;
 		try {
 			conn = connect();
 			pstmt = conn.prepareStatement(
@@ -311,6 +311,7 @@ public class MatchingDAO {
 			rs = pstmt.executeQuery();
 
 			if (rs.next()) {
+				leaderVO = new LeaderVO();
 				leaderVO.setUserId(rs.getString(1));
 				leaderVO.setWait(rs.getBoolean(2));
 				leaderVO.setNormal(rs.getBoolean(3));
@@ -462,6 +463,30 @@ public class MatchingDAO {
 		}
 	}
 
+	// 파티 맴버 삽입 (v2)
+	public void insertPartyMember(int matchingId, String leaderId, String userId) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement(
+					"insert into party_member_info_tbl(matching_id, member_id, " + "pay, leader_id) values(?,?,?,?)");
+
+			pstmt.setInt(1, matchingId);
+			pstmt.setString(2, userId);
+			pstmt.setString(3, "3650");
+			pstmt.setString(4, leaderId);
+
+			pstmt.executeUpdate();
+		} catch (Exception ex) {
+			System.out.println("오류 발생 : " + ex);
+			System.out.println("(DAO - insertPartyMember(v2))에러");
+		} finally {
+			close(conn, pstmt);
+		}
+	}
+
 	// member_wait안에 is_wait데이터 false로 변환
 	public void updateIswaitToFalseInMemberWait(MemberVO memberVO) {
 		Connection conn = null;
@@ -520,31 +545,71 @@ public class MatchingDAO {
 		return matchingVO;
 	}
 
-	// 현재 매칭테이블에 매칭된 파티원 정보
-	public ArrayList<MemberVO> getPresentMatchingMember(int matchingId) {
+	// 현재 매칭테이블에 매칭된 파티원 수
+	public int getPresentMatchingMember(int matchingId) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		ArrayList<MemberVO> al = new ArrayList<MemberVO>();
-		MemberVO memberVO = null;
+
 		try {
 			conn = connect();
-			pstmt = conn.prepareStatement("select *"
-					+ "from matching_tbl m, party_member_info_tbl p"
-					+ "where m.matching_id = ? and p.wouldUYN = true;");
+			pstmt = conn.prepareStatement("select count(*)"
+					+ "from matching_tbl m join party_member_info_tbl p"
+					+ "on m.leader_id = p.leader_id"
+					+ "where m.matching_id = ? and p.wouldUYN = true");
 			pstmt.setInt(1, matchingId);
-			
+
 			rs = pstmt.executeQuery();
-			
-			
-			
-			
+
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+
 		} catch (Exception ex) {
 			System.out.println("오류 발생 : " + ex);
-			System.out.println("(DAO - canIJoinYourMatching)에러");
+			System.out.println("(DAO - getPresentMatchingMember)에러");
 		} finally {
 			close(conn, pstmt);
 		}
-		return al;
+		return 0;
+	}
+
+	// 파티원 수가 다 찼을 때
+	public void setIsFullTrue(int matchingId) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement("update matching_tbl set is_full = true where matching_id = ?");
+
+			pstmt.executeUpdate();
+
+		} catch (Exception ex) {
+			System.out.println("오류 발생 : " + ex);
+			System.out.println("(DAO - setIsFullFalse)에러");
+		} finally {
+			close(conn, pstmt);
+		}
+	}
+
+	// member_wait안에 is_wait데이터 false로 삽입
+	public void insertIswaitToFalseInMemberWait(String userId) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement("insert into member_wait_tbl(user_id, is_wait, wouldUYN) values(?, 0, 0)");
+			pstmt.setString(1, userId);
+			pstmt.executeUpdate();
+
+		} catch (Exception ex) {
+			System.out.println("오류 발생 : " + ex);
+			System.out.println("(DAO - insertIswaitToFalseInMemberWait)에러");
+		} finally {
+			close(conn, pstmt);
+		}
 	}
 }

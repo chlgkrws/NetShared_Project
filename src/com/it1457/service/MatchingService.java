@@ -50,39 +50,54 @@ public class MatchingService {
 		}
 	}
 
-	//대기 중인 파티장 조회
+	// 대기 중인 파티장 조회
 	public LeaderVO searchLeaderToMatching() {
 		return dao.searchLeaderToMatching();
 	}
-	
-	//대기 중인 파티원 조회
+
+	// 대기 중인 파티원 조회
 	public ArrayList<MemberVO> searchMemberToMatching() {
 		return dao.searchMemberToMatching();
 	}
-	
-	//매칭 아이디 조회
+
+	// 매칭 아이디 조회
 	public int getMatchingId(MatchingVO matchingVO) {
 		return dao.getMatchingId(matchingVO);
 	}
 
-	//파티 맴버 삽입
+	// 파티 맴버 삽입
 	public void insertPartyMember(int matchingId, String leaderId, MemberVO memberVO) {
 		dao.insertPartyMember(matchingId, leaderId, memberVO);
 	}
-	
-	//member_wait안에 is_wait데이터 false로 변환
+
+	// 파티 맴버 삽입(v2)
+	public void insertPartyMember(int matchingId, String leaderId, String userId) {
+		dao.insertPartyMember(matchingId, leaderId, userId);
+	}
+
+	// member_wait안에 is_wait데이터 false로 변환
 	public void updateIswaitToFalseInMemberWait(MemberVO memberVO) {
 		dao.updateIswaitToFalseInMemberWait(memberVO);
 	}
-	
-	//매칭 중인 파티 중 빈자리가 있는지 확인
+
+	// 매칭 중인 파티 중 빈자리가 있는지 확인
 	public MatchingVO canIJoinYourMatching() {
 		return dao.canIJoinYourMatching();
 	}
-	
-	//현재 매칭테이블에 매칭된 파티원 수
-	public ArrayList<MemberVO> getPresentMatchingMember(int matchingId) {
+
+	// 현재 매칭테이블에 매칭된 파티원 수
+	public int getPresentMatchingMember(int matchingId) {
 		return dao.getPresentMatchingMember(matchingId);
 	}
-	
+
+	// 파티원 수가 다 찼을 때
+	public void setIsFullTrue(int matchingId) {
+		dao.setIsFullTrue(matchingId);
+	}
+
+	// member_wait안에 is_wait데이터 false로 삽입
+	public void insertIswaitToFalseInMemberWait(String userId) {
+		dao.insertIswaitToFalseInMemberWait(userId);
+	}
+
 }
