@@ -12,16 +12,18 @@ public class LikeUpController implements Controller {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		
 		try {
 			String userId = (String) request.getParameter("id");
 			Integer boardId = Integer.parseInt((String) request.getParameter("boardId"));
-
+			
 			BoardService service = BoardService.getInstance();
 
 			// likeUp에 있는지 체크
 			int check = service.checkLike(boardId, userId);
-
+			
+			//원래 0인 게시판이라면 +1을 할 수 있도록 함.
+			
 			// 이미 있다면 1 없으면 0
 			if (check == 1) {
 				String msg = "이미 추천하셨습니다.";

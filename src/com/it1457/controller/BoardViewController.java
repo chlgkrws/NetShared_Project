@@ -16,10 +16,19 @@ public class BoardViewController implements Controller {
 		try {
 			String preBoardId = request.getParameter("boardId"); // 파라미터로 게시물id값을 받아옴
 			Integer boardId = Integer.parseInt(preBoardId);
-
+			String starRate = "";
+			
 			BoardService boardService = BoardService.getInstance();
 			BoardVO boardVO = boardService.getView(boardId);
 			request.setAttribute("board", boardVO);
+			
+			for(int i = 0; i < boardVO.getStarRate(); i++) {
+				starRate += "★";
+			}
+			
+			request.setAttribute("star", starRate);
+			
+			
 			HttpUtil.forward(request, response, "views/board/post.jsp");
 		} catch (Exception e) {
 			e.printStackTrace();

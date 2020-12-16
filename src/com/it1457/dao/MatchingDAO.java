@@ -505,6 +505,24 @@ public class MatchingDAO {
 		}
 	}
 
+	// leader_wait안에 is_wait데이터 false로 변환
+	public void updateIswaitToFalseInLeaderWait(String leaderId) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = connect();
+			pstmt = conn.prepareStatement("update leader_wait_tbl set is_wait = 0, wouldUYN = 0 where user_id = ?");
+			pstmt.setString(1, leaderId);
+			pstmt.executeUpdate();
+		} catch (Exception ex) {
+			System.out.println("오류 발생 : " + ex);
+			System.out.println("(DAO - updateIswaitToFalseInLeaderWait)에러");
+		} finally {
+			close(conn, pstmt);
+		}
+	}
+
 	// 매칭 중인 파티 중 빈자리가 있는지 확인
 	public MatchingVO canIJoinYourMatching() {
 		Connection conn = null;
@@ -553,10 +571,8 @@ public class MatchingDAO {
 
 		try {
 			conn = connect();
-			pstmt = conn.prepareStatement("select count(*)"
-					+ "from matching_tbl m join party_member_info_tbl p"
-					+ "on m.leader_id = p.leader_id"
-					+ "where m.matching_id = ? and p.wouldUYN = true");
+			pstmt = conn.prepareStatement("select count(*)" + "from matching_tbl m join party_member_info_tbl p"
+					+ "on m.leader_id = p.leader_id" + "where m.matching_id = ? and p.wouldUYN = true");
 			pstmt.setInt(1, matchingId);
 
 			rs = pstmt.executeQuery();

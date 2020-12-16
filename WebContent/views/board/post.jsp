@@ -50,7 +50,7 @@
 					<p style="font-size: 16px; margin-top: 30px; margin-bottom: 30px;">
 						<b>작성자</b> &nbsp; ${board.writer } &nbsp; I &nbsp; <b>등록일</b>
 						&nbsp; ${board.createdTime } &nbsp;I &nbsp; <b>추천수</b> &nbsp;
-						${board.recommend } &nbsp;I &nbsp; <b>별점</b> &nbsp;
+						${star } &nbsp;I &nbsp; <b>별점</b> &nbsp;
 						${board.starRate }점 &nbsp;I &nbsp; <b>장르</b> &nbsp; ${board.genre }
 					</p>
 					<hr style="margin-bottom: 30px;">

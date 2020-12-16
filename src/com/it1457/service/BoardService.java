@@ -68,12 +68,12 @@ public class BoardService {
 
 	// 추천수 증가
 	public void updateLike(int boardId) {
-		dao.updateLikeDown(boardId);
+		dao.updateLike(boardId);
 	}
 
 	// 추천수 감소
 	public void updateLikeDown(int boardId) {
-		dao.updateLike(boardId);
+		dao.updateLikeDown(boardId);
 	}
 	
 

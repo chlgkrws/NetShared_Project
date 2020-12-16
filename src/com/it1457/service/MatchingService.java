@@ -79,6 +79,11 @@ public class MatchingService {
 	public void updateIswaitToFalseInMemberWait(MemberVO memberVO) {
 		dao.updateIswaitToFalseInMemberWait(memberVO);
 	}
+	
+	// leader_wait안에 is_wait데이터 false로 변환
+	public void updateIswaitToFalseInLeaderWait(String leaderId) {
+		dao.updateIswaitToFalseInLeaderWait(leaderId);
+	}
 
 	// 매칭 중인 파티 중 빈자리가 있는지 확인
 	public MatchingVO canIJoinYourMatching() {
