@@ -310,7 +310,7 @@ public class BoardDAO {
 			pstmt.setInt(1, boardId);
 			pstmt.setString(2, userId);
 			rs = pstmt.executeQuery();
-
+			
 			if (rs.next()) {
 				return 1;
 			} else {

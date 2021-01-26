@@ -56,7 +56,7 @@ public class MyPageController implements Controller {
 
 		String pattern = account.substring(partLen - subLen, partLen + subLen + 1);
 		account = account.replace(pattern, "*".repeat(partLen));
-
+		
 		return account;
 	}
 
